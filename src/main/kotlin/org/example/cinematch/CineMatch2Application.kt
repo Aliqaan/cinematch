@@ -8,5 +8,4 @@ class CineMatch2Application
 
 fun main(args: Array<String>) {
     runApplication<CineMatch2Application>(*args)
-
 }
