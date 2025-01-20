@@ -43,6 +43,10 @@ jobs:
       - name: Build
         run: ./gradlew build --no-daemon
 
+      # Migration
+      - name: Migrate
+        run: ./gradlew flywayMigrate --no-daemon
+
       # Run tests
       - name: Test
         run: ./gradlew test --no-daemon

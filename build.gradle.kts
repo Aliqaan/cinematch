@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    id("org.flywaydb.flyway") version "9.22.3"
 }
 
 group = "org.example"
@@ -34,6 +35,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("org.postgresql:postgresql")
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
+    implementation("org.flywaydb:flyway-core:9.22.3")
 }
 
 kotlin {
@@ -50,4 +52,11 @@ allOpen {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+flyway {
+    url = "jdbc:postgresql://${System.getenv("DB_HOST")}:${System.getenv("DB_PORT")}/${System.getenv("DB_NAME")}"
+    user = System.getenv("DB_USERNAME")
+    password = System.getenv("DB_PASSWORD")
+    schemas = arrayOf("public")
 }
