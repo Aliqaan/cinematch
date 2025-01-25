@@ -25,6 +25,9 @@ jobs:
           java-version: 21
           distribution: corretto
 
+      - name: test env
+        run: echo $JWT_SECRET
+
       # Cache Gradle dependencies for faster builds
       - name: Cache Gradle Dependencies
         uses: actions/cache@v3
