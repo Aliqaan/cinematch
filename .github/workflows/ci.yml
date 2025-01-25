@@ -26,6 +26,8 @@ jobs:
           distribution: corretto
 
       - name: test env
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: echo $JWT_SECRET
 
       # Cache Gradle dependencies for faster builds
