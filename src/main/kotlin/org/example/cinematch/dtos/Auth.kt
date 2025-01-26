@@ -2,7 +2,7 @@ package org.example.cinematch.dtos
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Size
+import org.example.cinematch.validation.ValidPassword
 
 data class LoginResponse(
     val accessToken: String,
@@ -17,8 +17,7 @@ data class RegisterRequest(
     @field:Email(message = "Invalid email")
     @field:NotBlank(message = "Email is required")
     val email: String,
-    @field:Size(min = 8, message = "Password must be at least 8 characters")
-    @field:NotBlank(message = "Password is required")
+    @field:ValidPassword
     val password: String,
     @field:NotBlank(message = "First name is required")
     val firstName: String,
