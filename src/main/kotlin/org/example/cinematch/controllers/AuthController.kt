@@ -2,9 +2,11 @@ package org.example.cinematch.controllers
 
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.Valid
 import org.apache.coyote.BadRequestException
 import org.example.cinematch.dtos.LoginRequest
 import org.example.cinematch.dtos.LoginResponse
+import org.example.cinematch.dtos.RegisterRequest
 import org.example.cinematch.models.UserStatus
 import org.example.cinematch.services.UserService
 import org.example.cinematch.utils.JwtUtils
@@ -43,6 +45,7 @@ class AuthController(
         val refreshToken = jwtUtils.generateRefreshToken(user.email)
 
         userService.saveRefreshToken(user.id, refreshToken)
+        userService.updateLastLogin(user)
 
         response.addCookie(
             Cookie("refreshToken", refreshToken).apply {
@@ -89,5 +92,16 @@ class AuthController(
         return ResponseEntity.noContent().build()
     }
 
-//        TODO register
+    @PostMapping("/register")
+    fun register(
+        @Valid @RequestBody registerRequest: RegisterRequest,
+    ): ResponseEntity<Void> {
+        userService.registerUser(
+            registerRequest.email,
+            registerRequest.password,
+            registerRequest.firstName,
+            registerRequest.lastName,
+        )
+        return ResponseEntity.noContent().build()
+    }
 }
