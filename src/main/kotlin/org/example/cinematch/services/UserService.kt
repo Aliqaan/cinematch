@@ -1,5 +1,6 @@
 package org.example.cinematch.services
 
+import jakarta.transaction.Transactional
 import org.example.cinematch.models.Token
 import org.example.cinematch.models.User
 import org.example.cinematch.repositories.TokenRepository
@@ -71,5 +72,10 @@ class UserService(
                 ),
             )
         }
+    }
+
+    @Transactional
+    fun logout(refreshToken: String?) {
+        tokenRepository.deleteByToken(refreshToken)
     }
 }

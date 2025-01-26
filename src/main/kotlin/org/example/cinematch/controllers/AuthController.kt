@@ -71,5 +71,23 @@ class AuthController(
         return ResponseEntity.ok(LoginResponse(accessToken = newAccessToken))
     }
 
-//        TODO logout, register
+    @GetMapping("/logout")
+    fun logout(
+        @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
+        response: HttpServletResponse,
+    ): ResponseEntity<Void> {
+        userService.logout(refreshToken)
+
+        response.addCookie(
+            Cookie("refreshToken", "").apply {
+                isHttpOnly = true
+                secure = true
+                maxAge = 0 // Delete cookie
+            },
+        )
+
+        return ResponseEntity.noContent().build()
+    }
+
+//        TODO register
 }

@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface TokenRepository : JpaRepository<Token, Int> {
     fun findByUserId(userId: Int): Token?
+
+    fun deleteByToken(token: String?)
 }
