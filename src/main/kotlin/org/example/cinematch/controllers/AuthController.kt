@@ -3,10 +3,11 @@ package org.example.cinematch.controllers
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
-import org.apache.coyote.BadRequestException
 import org.example.cinematch.dtos.LoginRequest
 import org.example.cinematch.dtos.LoginResponse
 import org.example.cinematch.dtos.RegisterRequest
+import org.example.cinematch.exceptions.BadRequestException
+import org.example.cinematch.exceptions.InvalidTokenException
 import org.example.cinematch.models.UserStatus
 import org.example.cinematch.services.UserService
 import org.example.cinematch.utils.JwtUtils
@@ -66,7 +67,7 @@ class AuthController(
         }
 
         if (!jwtUtils.validateToken(refreshToken)) {
-            throw BadRequestException("Invalid refresh token")
+            throw InvalidTokenException()
         }
 
         val email = jwtUtils.extractEmail(refreshToken)

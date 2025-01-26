@@ -1,6 +1,7 @@
 package org.example.cinematch.services
 
 import jakarta.transaction.Transactional
+import org.example.cinematch.exceptions.AlreadyExistsException
 import org.example.cinematch.models.Token
 import org.example.cinematch.models.User
 import org.example.cinematch.models.UserStatus
@@ -24,7 +25,7 @@ class UserService(
         lastName: String,
     ): User {
         if (userRepository.existsByEmail(email)) {
-            throw IllegalArgumentException("Email is already in use")
+            throw AlreadyExistsException("User", email)
         }
 
         val encodedPassword = passwordEncoder.encode(password)
