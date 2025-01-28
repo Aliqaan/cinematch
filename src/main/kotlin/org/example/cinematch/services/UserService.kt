@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional
 import org.example.cinematch.exceptions.AlreadyExistsException
 import org.example.cinematch.models.Token
 import org.example.cinematch.models.User
-import org.example.cinematch.models.UserStatus
 import org.example.cinematch.repositories.TokenRepository
 import org.example.cinematch.repositories.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -36,7 +35,6 @@ class UserService(
                 firstName = firstName,
                 lastName = lastName,
                 passwordHash = encodedPassword,
-                status = UserStatus.ACTIVE,
             )
 
         return userRepository.save(user)

@@ -40,6 +40,41 @@ class JwtUtils(
             .compact()
     }
 
+    fun generateVerificationToken(userId: Int): String {
+        val expirationTime = 3 * 24 * 60 * 60 * 1000 // 3 days in milliseconds
+
+        return Jwts
+            .builder()
+            .setSubject(userId.toString())
+            .setExpiration(Date(System.currentTimeMillis() + expirationTime))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact()
+    }
+
+    fun decodeVerificationToken(token: String): Int? =
+        try {
+            Jwts
+                .parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .body.subject
+                .toInt()
+        } catch (e: Exception) {
+            null
+        }
+
+    fun isExpired(token: String): Boolean {
+        val expirationDate =
+            Jwts
+                .parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .body.expiration
+        return expirationDate.before(Date())
+    }
+
     fun validateToken(token: String): Boolean =
         try {
             Jwts

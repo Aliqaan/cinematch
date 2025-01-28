@@ -8,6 +8,7 @@ import org.example.cinematch.dtos.LoginResponse
 import org.example.cinematch.dtos.RegisterRequest
 import org.example.cinematch.exceptions.BadRequestException
 import org.example.cinematch.exceptions.InvalidTokenException
+import org.example.cinematch.models.User
 import org.example.cinematch.models.UserStatus
 import org.example.cinematch.services.UserService
 import org.example.cinematch.utils.JwtUtils
@@ -97,12 +98,16 @@ class AuthController(
     fun register(
         @Valid @RequestBody registerRequest: RegisterRequest,
     ): ResponseEntity<Void> {
-        userService.registerUser(
-            registerRequest.email,
-            registerRequest.password,
-            registerRequest.firstName,
-            registerRequest.lastName,
-        )
+        val user: User =
+            userService.registerUser(
+                registerRequest.email,
+                registerRequest.password,
+                registerRequest.firstName,
+                registerRequest.lastName,
+            )
+        val verificationToken = jwtUtils.generateVerificationToken(user.id)
+        // TODO Send verification email
+//        sendVerificationEmail(user.email, verificationToken)
         return ResponseEntity.noContent().build()
     }
 }

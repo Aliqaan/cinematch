@@ -25,7 +25,7 @@ data class User(
     @Column(name = "password_hash")
     val passwordHash: String,
     @Enumerated(EnumType.STRING)
-    var status: UserStatus,
+    var status: UserStatus = UserStatus.PENDING,
     @Column(name = "last_login")
     var lastLogin: LocalDateTime? = null,
     @Column(name = "created_at")
@@ -40,4 +40,5 @@ enum class UserStatus {
     ACTIVE,
     INACTIVE,
     DELETED,
+    PENDING,
 }
