@@ -2,6 +2,7 @@ package org.example.cinematch.controllers
 
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.example.cinematch.dtos.LoginRequest
 import org.example.cinematch.dtos.LoginResponse
@@ -10,6 +11,7 @@ import org.example.cinematch.exceptions.BadRequestException
 import org.example.cinematch.exceptions.InvalidTokenException
 import org.example.cinematch.models.User
 import org.example.cinematch.models.UserStatus
+import org.example.cinematch.services.EmailService
 import org.example.cinematch.services.UserService
 import org.example.cinematch.utils.JwtUtils
 import org.springframework.http.ResponseEntity
@@ -27,7 +29,9 @@ class AuthController(
     private val jwtUtils: JwtUtils,
     private val userService: UserService,
     private val passwordEncoder: PasswordEncoder,
+    private val emailService: EmailService,
 ) {
+    @Transactional
     @PostMapping("/login")
     fun login(
         @RequestBody loginRequest: LoginRequest,
@@ -94,6 +98,7 @@ class AuthController(
         return ResponseEntity.noContent().build()
     }
 
+    @Transactional
     @PostMapping("/register")
     fun register(
         @Valid @RequestBody registerRequest: RegisterRequest,
@@ -106,8 +111,7 @@ class AuthController(
                 registerRequest.lastName,
             )
         val verificationToken = jwtUtils.generateVerificationToken(user.id)
-        // TODO Send verification email
-//        sendVerificationEmail(user.email, verificationToken)
+        emailService.sendVerificationEmail(user.email, verificationToken)
         return ResponseEntity.noContent().build()
     }
 }
